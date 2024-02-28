@@ -16,10 +16,6 @@ class RegressionModel:
 
     def training(self) -> bool:
         gradient = self.gradient_err_func(self.theta)
-        # if (np.linalg.norm(gradient) < self.epilon):
-        #     return False
-        # while np.isnan(self.theta[0]):
-        #     time.sleep(1)
         if self.theta[0] == 0 and self.theta[1] == 0:
             learningRate = 1e-5
         else:
@@ -28,19 +24,17 @@ class RegressionModel:
             learningRate = (
                 np.abs((self.theta - self.last_theta) @ (delta_gradient)) \
                 / (delta_gradient @ delta_gradient)
-            ) ### tlqkf 왜 이 값이지?
-        if (np.linalg.norm(gradient) < self.epilon):
-            return False # 임시
+            )
         tmp_theta = self.theta - learningRate * gradient
-        if tmp_theta[0] == self.theta[0] and tmp_theta[1] == self.theta[1]:
-            return False # 임시
+        if np.array_equal(tmp_theta, self.theta):
+            return False
         self.last_theta = self.theta
         self.theta = tmp_theta
         return True
-        
+
     def estimate(self, mile: float, theta) -> float:
         return theta[0] + (theta[1] * mile)
-    
+
     def gradient_err_func(self, theta: np.ndarray) -> np.ndarray:
         dtheta0 = 0
         for data in self.learnData:

@@ -15,7 +15,7 @@ def main():
     model = RegressionModel("data.csv", "train_parameter.json", 1e-5)
     while model.training():
         print(f"\rtheta0: {model.theta[0]}, theta1: {model.theta[1]}", end="")
-    print()
+    print(f"\rtheta0: {model.theta[0]}, theta1: {model.theta[1]}")
     model.write_result_parameter()
     model.view_plot()
 
