@@ -16,7 +16,7 @@ class RegressionModel:
 
     def training(self) -> bool:
         gradient = self.gradient_err_func(self.theta)
-        if self.theta[0] == 0 and self.theta[1] == 0:
+        if np.all(self.theta == 0):
             learningRate = 1e-5
         else:
             last_gradient = self.gradient_err_func(self.last_theta)
