@@ -12,7 +12,7 @@ def main():
 
     main function, Entrypoint when this module is executed directly.
     """
-    model = RegressionModel("data.csv", "train_parameter.json", 1e-5)
+    model = RegressionModel("data.csv", "train_parameter.json")
     while model.training():
         print(f"\rtheta0: {model.theta[0]}, theta1: {model.theta[1]}", end="")
     print(f"\rtheta0: {model.theta[0]}, theta1: {model.theta[1]}")
