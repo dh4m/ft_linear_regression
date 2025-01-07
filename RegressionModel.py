@@ -8,46 +8,46 @@ class RegressionModel:
     def __init__(self, datapath, outputpath):
         self.learnData = pd.read_csv(datapath).to_numpy()
         self.learnDataSize = self.learnData.shape[0]
-        # self.last_theta = np.array([0, 0])
-        # self.last_gradient = np.array([0, 0])
+        self.last_theta = np.array([0, 0])
+        self.last_gradient = np.array([0, 0])
         self.theta = np.array([0, 0])
         self.outputpath = outputpath
         self.iter = 0
-        self.hessian = self.hessian_err_func()
+        # self.hessian = self.hessian_err_func()
 
     def training(self) -> bool:
         self.iter += 1
         gradient = self.gradient_err_func(self.theta)
 
-        # if np.all(self.theta == 0):
-        #     learningRate = 1e-5
-        # else:
-        #     delta_gradient = gradient - self.last_gradient
-        #     learningRate = (
-        #         np.abs((self.theta - self.last_theta) @ (delta_gradient)) \
-        #         / (delta_gradient @ delta_gradient)
-        #     )
-        # tmp_theta = self.theta - learningRate * gradient
-        # self.last_gradient = gradient
-        # self.last_theta = self.theta
+        if np.all(self.theta == 0):
+            learningRate = 1e-5
+        else:
+            delta_gradient = gradient - self.last_gradient
+            learningRate = (
+                np.abs((self.theta - self.last_theta) @ (delta_gradient)) \
+                / (delta_gradient @ delta_gradient)
+            )
+        tmp_theta = self.theta - learningRate * gradient
+        self.last_gradient = gradient
+        self.last_theta = self.theta
 
-        tmp_theta = self.theta - np.linalg.inv(self.hessian) @ gradient
+        # tmp_theta = self.theta - np.linalg.inv(self.hessian) @ gradient
 
         if np.array_equal(tmp_theta, self.theta):
             return False
         self.theta = tmp_theta
         return True
     
-    def hessian_err_func(self) -> np.ndarray:
-        hessian = np.zeros((2, 2))
-        for data in self.learnData:
-            hessian[0][0] += 1
-            hessian[0][1] += data[0]
-            hessian[1][0] += data[0]
-            hessian[1][1] += data[0] ** 2
-        hessian[0][0] += 1e-5
-        hessian[1][1] += 1e-5
-        return hessian
+    # def hessian_err_func(self) -> np.ndarray:
+    #     hessian = np.zeros((2, 2))
+    #     for data in self.learnData:
+    #         hessian[0][0] += 1
+    #         hessian[0][1] += data[0]
+    #         hessian[1][0] += data[0]
+    #         hessian[1][1] += data[0] ** 2
+    #     hessian[0][0] += 1e-5
+    #     hessian[1][1] += 1e-5
+    #     return hessian
 
     def estimate(self, mile: float, theta) -> float:
         return theta[0] + (theta[1] * mile)
